@@ -1,22 +1,33 @@
-#include "webserver.h"
+#include <WiFi.h>
+#include <WebServer.h>
 #include <Update.h>
+
+#include "webserver.h"
 #include "web.h"
 #include "auth.h"
 
+extern WebServer server;
+
 void initWebServer() {
 
-  server.on("/", []() {
+  server.on("/", [&]() {
 
     if (!server.authenticate(WEB_USER, WEB_PASS)) {
       return server.requestAuthentication();
     }
 
-    server.send(200, "text/html", index_html);
+    server.send(
+      200,
+      "text/html",
+      index_html
+    );
   });
 
-  server.on("/update", HTTP_POST,
+  server.on(
+    "/update",
+    HTTP_POST,
 
-    []() {
+    [&]() {
       if (!server.authenticate(WEB_USER, WEB_PASS)) {
         return server.requestAuthentication();
       }
@@ -28,11 +39,12 @@ void initWebServer() {
       );
 
       if (!Update.hasError()) {
+        delay(500);
         ESP.restart();
       }
     },
 
-    []() {
+    [&]() {
       if (!server.authenticate(WEB_USER, WEB_PASS)) {
         return server.requestAuthentication();
       }
