@@ -353,10 +353,9 @@ function setSleepUI(t){
 
   safeSend("SLEEPTIME:" + (t * 1000));
 }
-
-)rawliteral";
 </script>
 </body>
 </html>
+)rawliteral";
 
 #endif
