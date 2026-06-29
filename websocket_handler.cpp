@@ -62,20 +62,24 @@ void onWebSocketEvent(
 
   /*/* MAX TEMP LIMIT */
   else if (msg.startsWith("MAXTEMP:")) {
+
+    int hwLimit =
+     (currentTip == TIP_T12)
+     ? TEMP_MAX_T12
+     : TEMP_MAX_C210;
+
     maxTemp = constrain(
-     msg.substring(8).toInt(),
-     TEMP_MIN,
-     TEMP_MAX
-   );
+    msg.substring(8).toInt(),
+    TEMP_MIN,
+    hwLimit
+    );
 
     if (targetTemp > maxTemp) {
      targetTemp = maxTemp;
      encoderPos = targetTemp;
    }
 
-    webControl = true;
-
-    saveSettings();
+     saveSettings();
   }
 
   /* SLEEP TIME */
